@@ -1,0 +1,34 @@
+---
+layout: post
+read_time: true
+show_date: true
+title:  高博的第一篇博客
+date:   2021-03-18 15:14:20 -0600
+description: "Inspired by Deep Mind's astonishing feats of having their Alpha Go, Alpha Zero and Alpha Star programs learn (and be amazing at it) Go, Chess, Atari games and lately Starcraft; I set myself to the task of programming a neural network that will learn by itself how to play the ancient game of tic tac toe. How hard could it be?"
+img: posts/20210318/TicTacToeSml.jpg
+tags: [machine learning, artificial intelligence, reinforcement learning, coding, python]
+author: Armando Maynez
+github: amaynez/TicTacToe/
+toc: yes # leave empty or erase for no TOC
+---
+<center><img style="float: left;margin-right: 1em;" src='./assets/img/posts/20210318/Game_Screen.png' width="310" height="300"></center>
+
+## Background
+After many years of a corporate career (17) diverging from computer science, I have now decided to learn Machine Learning and in the process return to coding (something I have always loved!).
+
+To fully grasp the essence of ML I decided to start by [coding a ML library myself](./ML-Library-from-scratch.html), so I can fully understand the inner workings, linear algebra and calculus involved in Stochastic Gradient Descent. And on top learn Python (I used to code in C++ 20 years ago).
+
+I built a general purpose basic ML library that creates a Neural Network (only DENSE layers), saves and loads the weights into a file, does forward propagation and training (optimization of weights and biases) using SGD. I tested the ML library with the XOR problem to make sure it worked fine. You can read the blog post for it [here](./ML-Library-from-scratch.html).
+
+For the next challenge I am interested in reinforcement learning greatly inspired by Deep Mind's astonishing feats of having their Alpha Go, Alpha Zero and Alpha Star programs learn (and be amazing at it) Go, Chess, Atari games and lately Starcraft; I set myself to the task of programming a neural network that will learn by itself how to play the ancient game of tic tac toe (or noughts and crosses).
+
+How hard could it be?
+
+Of course the first thing to do was to program the game itself, so I chose Python because I am learning it, so it gives me a good practice opportunity, and PyGame for the interface.
+Coding the game was quite straightforward, albeit for the hiccups of being my first PyGame and almost my first Python program ever.
+I created the game quite openly, in such a way that it can be played by two humans, by a human vs. an algorithmic AI, and a human vs. the neural network. And of course the neural network against a choice of 3 AI engines: random, [minimax](https://en.wikipedia.org/wiki/Minimax) or hardcoded (an exercise I wanted to do since a long time).
+
+While training, the visuals of the game can be disabled to make training much faster.
+Now, for the fun part, training the network, I followed Deep Mind's own DQN recommendations:
+
+<ul><li>The network will be an approximation for the Q value function or Bellman equation, meaning that the network will be trained to predict the "value" of each move available in a given game state.</li><li>A replay experience memory was implemented. This meant that the neural network will not be trained after each move. Each move will be recorded in a special "memory" alongside with the state of the board and the reward it received for taking such an action (move).</li><li>After the memory is sizable enough, batches of random experiences sampled from the replay memory are used for every training round</li><li>A secondary neural network (identical to the main one) is used to calculate part of the Q value function (Bellman equation), in particular the future Q values. And then it is updated with the main network's weights every <em>n</em> games. This is done so that we are not chasing a moving target.</li></ul>
